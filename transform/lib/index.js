@@ -452,9 +452,9 @@ function escapeQuote(data) {
 function strToCalls(data) {
     let out = "";
     const len = data.length - 1;
-    if (len >= 8) {
+    if (len >= 7) {
         let i = 0;
-        for (; i < len - 7; i += 8) {
+        for (; i < len - 6; i += 8) {
             const a = BigInt(data.charCodeAt(i));
             const b = BigInt(data.charCodeAt(i + 1));
             const c = BigInt(data.charCodeAt(i + 2));
@@ -466,7 +466,7 @@ function strToCalls(data) {
             out += "  bl.write_128(i16x8(" + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g + ", " + h + ")); /* " + data.charAt(i) + data.charAt(i + 1) + data.charAt(i + 2) + data.charAt(i + 3) + data.charAt(i + 4) + data.charAt(i + 5) + data.charAt(i + 6) + data.charAt(i + 7) + " */\n";
         }
         if (i < len) {
-            if (len - i >= 4) {
+            if (len - i >= 3) {
                 const a = BigInt(data.charCodeAt(i));
                 const b = BigInt(data.charCodeAt(i + 1));
                 const c = BigInt(data.charCodeAt(i + 2));
@@ -474,7 +474,7 @@ function strToCalls(data) {
                 out += "  bl.write_64(" + ((d << BigInt(48)) | (c << BigInt(32)) | (b << BigInt(16)) | a) + "/* " + data.charAt(i) + data.charAt(i + 1) + data.charAt(i + 2) + data.charAt(i + 3) + " */\n";
                 i += 4;
             }
-            if (len - i >= 2) {
+            if (len - i >= 1) {
                 const a = data.charCodeAt(i);
                 const b = data.charCodeAt(i + 1);
                 out += "  bl.write_32(" + ((b << 16) | a) + "); /* " + data.charAt(i) + data.charAt(i + 1) + " */\n";
@@ -491,9 +491,9 @@ function strToCalls(data) {
             out += "  bl.write_16(" + data.charCodeAt(len) + "); /* " + data.charAt(len) + " */\n";
         }
     }
-    else if (len >= 4) {
+    else if (len >= 3) {
         let i = 0;
-        for (; i < len - 3; i += 4) {
+        for (; i < len - 2; i += 4) {
             const a = BigInt(data.charCodeAt(i));
             const b = BigInt(data.charCodeAt(i + 1));
             const c = BigInt(data.charCodeAt(i + 2));
@@ -509,16 +509,16 @@ function strToCalls(data) {
             out += "  bl.write_16(" + data.charCodeAt(len) + "); /* " + data.charAt(len) + " */\n";
         }
     }
-    else if (len >= 2) {
+    else if (len >= 1) {
         let i = 0;
         for (; i < len; i += 2) {
             const a = data.charCodeAt(i);
             const b = data.charCodeAt(i + 1);
             out += "  bl.write_32(" + ((b << 16) | a) + "); /* " + data.charAt(i) + data.charAt(i + 1) + " */\n";
         }
-        if (i != len)
-            out += "  bl.write_16(" + data.charCodeAt(len) + "); /* " + data.charAt(len) + " */\n";
+        if (i > len)
+            out += "  bl.write_16(" + data.charCodeAt(i) + "); /* " + data.charAt(i) + " */\n";
     }
     return out;
 }
-console.log(strToCalls('{"x":1,"y":2,"z":3}'));
+console.log(strToCalls('{"a":1,"b":2","c":3,"e":4,"f":5,"g":6,"h":7,"i":8,"j":9,"k":10}'));

@@ -21,6 +21,21 @@ class Vec3 {
     }
 }
 
+@json
+class Foo {
+    a: i32;
+    b: i32;
+    c: i32;
+    d: i32;
+    e: i32;
+    f: i32;
+    g: i32;
+    h: i32;
+    i: i32;
+    j: i32;
+    k: i32;
+}
+
 console.log(load<i32>(changetype<usize>("12")).toString())
 const vec: Vec3 = {
     x: 3,

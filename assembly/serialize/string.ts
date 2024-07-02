@@ -23,49 +23,54 @@ import { _intTo16, intTo16, unsafeCharCodeAt } from "../util";
     let last: i32 = 0;
     for (let i = 0; i < data.length; i++) {
         const char = unsafeCharCodeAt(<string>data, i);
-        if (char === QUOTE || char === BACK_SLASH) {
-            result.write(<string>data, last, i);
-            result.writeCodePoint(BACK_SLASH);
-            last = i;
-        } else if (16 > char) {
-            result.write(<string>data, last, i);
-            last = i + 1;
-            switch (char) {
-                case BACKSPACE: {
-                    result.write("\\b");
-                    break;
-                }
-                case TAB: {
-                    result.write("\\t");
-                    break;
-                }
-                case NEW_LINE: {
-                    result.write("\\n");
-                    break;
-                }
-                case FORM_FEED: {
-                    result.write("\\f");
-                    break;
-                }
-                case CARRIAGE_RETURN: {
-                    result.write("\\r");
-                    break;
-                }
-                default: {
-                    // all chars 0-31 must be encoded as a four digit unicode escape sequence
-                    // \u0000 to \u000f handled here
-                    result.write("\\u000");
-                    result.write(char.toString(16));
-                    break;
-                }
+        if (char > 31) {
+            if (char === QUOTE || char === BACK_SLASH) {
+                result.write(<string>data, last, i);
+                result.writeCodePoint(BACK_SLASH);
+                last = i;
             }
-        } else if (32 > char) {
-            result.write(<string>data, last, i);
-            last = i + 1;
-            // all chars 0-31 must be encoded as a four digit unicode escape sequence
-            // \u0010 to \u001f handled here
-            result.write("\\u00");
-            result.write(char.toString(16));
+        } else {
+
+            if (16 > char) {
+                result.write(<string>data, last, i);
+                last = i + 1;
+                switch (char) {
+                    case BACKSPACE: {
+                        result.write("\\b");
+                        break;
+                    }
+                    case TAB: {
+                        result.write("\\t");
+                        break;
+                    }
+                    case NEW_LINE: {
+                        result.write("\\n");
+                        break;
+                    }
+                    case FORM_FEED: {
+                        result.write("\\f");
+                        break;
+                    }
+                    case CARRIAGE_RETURN: {
+                        result.write("\\r");
+                        break;
+                    }
+                    default: {
+                        // all chars 0-31 must be encoded as a four digit unicode escape sequence
+                        // \u0000 to \u000f handled here
+                        result.write("\\u000");
+                        result.write(char.toString(16));
+                        break;
+                    }
+                }
+            } else {
+                result.write(<string>data, last, i);
+                last = i + 1;
+                // all chars 0-31 must be encoded as a four digit unicode escape sequence
+                // \u0010 to \u001f handled here
+                result.write("\\u00");
+                result.write(char.toString(16));
+            }
         }
     }
     result.write(<string>data, last);

@@ -199,7 +199,6 @@ Serialization Benchmarks:
 | { x: f64, y: f64, z: f64 } | 3,878,604          | 44,557,996 (11.5x) | 113,203,242 (29.2x) | 172,023,231 (44.4x) | 8.61 GB/s      |
 
 
-
 Deserialization Benchmarks:
 
 | Value                      | JavaScript (ops/s) | JSON-AS (ops/s) | Difference|

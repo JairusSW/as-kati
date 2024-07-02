@@ -469,7 +469,7 @@ function escapeQuote(data: string): string {
   return data.replace(/\"/g, "\\\"");
 }
 
-function strToCalls(data) {
+function strToCalls(data: string): string {
   let out = "";
   const len = data.length - 1;
   if (len >= 7) {
@@ -537,4 +537,4 @@ function strToCalls(data) {
   return out;
 }
 
-console.log(strToCalls('{"x":1,"y":2,"z":3}'))
+console.log(strToCalls('{"a":1,"b":2","c":3,"e":4,"f":5,"g":6,"h":7,"i":8,"j":9,"k":10}'))
