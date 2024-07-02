@@ -30,8 +30,7 @@ import { _intTo16, intTo16, unsafeCharCodeAt } from "../util";
                 last = i;
             }
         } else {
-
-            if (16 > char) {
+            if (16 > char) {    
                 result.write(<string>data, last, i);
                 last = i + 1;
                 switch (char) {

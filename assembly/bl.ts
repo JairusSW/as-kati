@@ -1,3 +1,4 @@
+import { dtoa_buffered, itoa_buffered } from "util/number";
 import { OBJECT, TOTAL_OVERHEAD } from "rt/common";
 @inline const MAX_LEN: usize = 65536;
 const STORE: usize[] = [];
@@ -8,6 +9,22 @@ let POINTER = changetype<usize>(CACHE);
 @inline const MAX_CACHE = CACHE + MAX_LEN;
 
 export namespace bl {
+    @inline export function write_int<T extends number>(num: T): void {
+        POINTER += itoa_buffered(POINTER, num) << 1;
+        if (MAX_CACHE <= POINTER) bl.shrink();
+    }
+    @inline export function write_int_u<T extends number>(num: T): void {
+        POINTER += itoa_buffered(POINTER, num) << 1;
+    }
+
+    @inline export function write_fl<T extends number>(num: T): void {
+        POINTER += dtoa_buffered(POINTER, num) << 1;
+        if (MAX_CACHE <= POINTER) bl.shrink();
+    }
+    @inline export function write_fl_u<T extends number>(num: T): void {
+        POINTER += dtoa_buffered(POINTER, num) << 1;
+    }
+
     @inline export function write_b(buf: usize, bytes: usize = changetype<OBJECT>(buf - TOTAL_OVERHEAD).rtSize): void {
         memory.copy(POINTER, buf, bytes);
         POINTER += bytes;
@@ -17,6 +34,7 @@ export namespace bl {
         memory.copy(POINTER, buf, bytes);
         POINTER += bytes;
     }
+
     @inline export function write_s(str: string, bytes: usize = changetype<OBJECT>(changetype<usize>(str) - TOTAL_OVERHEAD).rtSize): void {
         memory.copy(POINTER, changetype<usize>(str), bytes);
         POINTER += bytes;
@@ -26,6 +44,7 @@ export namespace bl {
         memory.copy(POINTER, changetype<usize>(str), bytes);
         POINTER += bytes;
     }
+
     @inline export function write_s_se(str: string, start: usize, end: usize): void {
         const bytes = end - start;
         memory.copy(POINTER, changetype<usize>(str) + start, bytes);
@@ -37,6 +56,7 @@ export namespace bl {
         memory.copy(POINTER, changetype<usize>(str) + start, bytes);
         POINTER += bytes;
     }
+
     @inline export function write_16(char: i32): void {
         store<u16>(POINTER, char);
         POINTER += 2;

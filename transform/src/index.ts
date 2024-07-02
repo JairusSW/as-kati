@@ -60,7 +60,7 @@ class JSONTransform extends BaseVisitor {
 
     if (!members.length) {
       let SERIALIZE_RAW_EMPTY = "__SERIALIZE(): string {\n  return \"{}\";\n}";
-      let SERIALIZE_BL_EMPTY = "__SERIALIZE_BL(): void {\n  bl.write_c(123);\n  bl.write_c(125);\n}";
+      let SERIALIZE_BL_EMPTY = "__SERIALIZE_BL(): void {\n  bl.write_16(123);\n  bl.write_16(125);\n}";
       //let SERIALIZE_PRETTY_EMPTY = "__SERIALIZE_PRETTY(): string {\n  return \"{}\";\n}";
 
       let INITIALIZE_EMPTY = "__INITIALIZE(): this {\n  return this;\n}";
@@ -231,7 +231,7 @@ class JSONTransform extends BaseVisitor {
 
     if (found) {
       SERIALIZE_RAW += "`;\n  store<u16>(changetype<usize>(out) + ((out.length - 1) << 1), 125);\n  return out;\n}";
-      SERIALIZE_BL += "  bl.write_c(125);\n}\n";
+      SERIALIZE_BL += "  bl.write_16(125);\n}\n";
       SERIALIZE_PRETTY += "`;\n  store<u32>(changetype<usize>(out) + ((out.length - 2) << 1), 8192010);\n  return out;\n}";
     } else {
       SERIALIZE_RAW += "`;\n};";
@@ -491,7 +491,7 @@ function strToCalls(data: string): string {
         const b = BigInt(data.charCodeAt(i + 1));
         const c = BigInt(data.charCodeAt(i + 2));
         const d = BigInt(data.charCodeAt(i + 3));
-        out += "  bl.write_64(" + ((d << BigInt(48)) | (c << BigInt(32)) | (b << BigInt(16)) | a) + "/* " + data.charAt(i) + data.charAt(i + 1) + data.charAt(i + 2) + data.charAt(i + 3) + " */\n";
+        out += "  bl.write_64(" + ((d << BigInt(48)) | (c << BigInt(32)) | (b << BigInt(16)) | a) + "); /* " + data.charAt(i) + data.charAt(i + 1) + data.charAt(i + 2) + data.charAt(i + 3) + " */\n";
         i += 4;
       }
       if (len - i >= 1) {
@@ -516,7 +516,7 @@ function strToCalls(data: string): string {
       const b = BigInt(data.charCodeAt(i + 1));
       const c = BigInt(data.charCodeAt(i + 2));
       const d = BigInt(data.charCodeAt(i + 3));
-      out += "  bl.write_64(" + ((d << BigInt(48)) | (c << BigInt(32)) | (b << BigInt(16)) | a) + "/* " + data.charAt(i) + data.charAt(i + 1) + data.charAt(i + 2) + data.charAt(i + 3) + " */\n";
+      out += "  bl.write_64(" + ((d << BigInt(48)) | (c << BigInt(32)) | (b << BigInt(16)) | a) + "); /* " + data.charAt(i) + data.charAt(i + 1) + data.charAt(i + 2) + data.charAt(i + 3) + " */\n";
     }
     if (i < len) {
       const a = data.charCodeAt(len - 1);

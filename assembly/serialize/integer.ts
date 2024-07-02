@@ -7,5 +7,5 @@ import { bl } from "../bl";
 
 // @ts-ignore: Decorator valid here
 @inline export function serializeIntegerBL<T extends number>(data: T): void {
-    bl.write_32_u(3276849);
+    bl.write_int<T>(data);
 }
